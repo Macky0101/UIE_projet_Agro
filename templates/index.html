@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroSmart Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <!-- Feather Icons (alternative à Lucide) -->
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i data-feather="sprout" class="icon-green"></i>
+                    <h1>AgroSmart</h1>
+                </div>
+            </div>
+            <div class="sidebar-separator"></div>
+            <div class="sidebar-content">
+                <div class="sidebar-group">
+                    <div class="sidebar-group-label">Main</div>
+                    <div class="sidebar-group-content">
+                        <ul class="sidebar-menu">
+                            <li class="sidebar-menu-item">
+                                <a href="/" class="sidebar-menu-button active">
+                                    <i data-feather="home"></i>
+                                    <span>Dashboard</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item">
+                                <a href="/predict_eau" class="sidebar-menu-button">
+                                    <i data-feather="droplet"></i>
+                                    <span>Prédiction d'eau</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item">
+                                <a href="/predict_culture" class="sidebar-menu-button">
+                                    <i data-feather="sprout"></i>
+                                    <span>Recommandation culture</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item">
+                                <a href="/analytics" class="sidebar-menu-button">
+                                    <i data-feather="bar-chart-2"></i>
+                                    <span>Analytiques</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="sidebar-separator"></div>
+                
+                <div class="sidebar-group">
+                    <div class="sidebar-group-label">Paramètres</div>
+                    <div class="sidebar-group-content">
+                        <ul class="sidebar-menu">
+                            <li class="sidebar-menu-item">
+                                <a href="/settings" class="sidebar-menu-button">
+                                    <i data-feather="settings"></i>
+                                    <span>Paramètres</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-menu-item">
+                                <a href="/help" class="sidebar-menu-button">
+                                    <i data-feather="help-circle"></i>
+                                    <span>Aide & Support</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar-footer">
+                <a href="/logout" class="sidebar-menu-button">
+                    <i data-feather="log-out"></i>
+                    <span>Déconnexion</span>
+                </a>
+                <button id="theme-toggle" class="theme-toggle">
+                    <i data-feather="sun" class="light-icon"></i>
+                    <i data-feather="moon" class="dark-icon"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="dashboard-header">
+                <button id="sidebar-toggle" class="sidebar-trigger">
+                    <i data-feather="menu"></i>
+                </button>
+                <div class="header-title">Dashboard</div>
+                <div class="header-actions">
+                    <div class="search-container">
+                        <i data-feather="search"></i>
+                        <input type="search" placeholder="Rechercher..." class="search-input">
+                    </div>
+                    <button class="notification-button">
+                        <i data-feather="bell"></i>
+                        <span class="notification-badge"></span>
+                    </button>
+                    <div class="user-avatar">US</div>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Metric Cards -->
+                <div class="metric-cards">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Utilisation d'eau</div>
+                            <i data-feather="droplet" class="icon-blue"></i>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-value">2,345 L</div>
+                            <p class="card-trend">+12% par rapport au mois dernier</p>
+                            <div class="progress-bar">
+                                <div class="progress-value blue" style="width: 75%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Rendement des cultures</div>
+                            <i data-feather="sprout" class="icon-green"></i>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-value">4.2 tonnes/ha</div>
+                            <p class="card-trend">+8% par rapport à la saison dernière</p>
+                            <div class="progress-bar">
+                                <div class="progress-value green" style="width: 80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Température</div>
+                            <i data-feather="thermometer" class="icon-orange"></i>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-value">24°C</div>
+                            <p class="card-trend">Température actuelle du champ</p>
+                            <div class="progress-bar">
+                                <div class="progress-value orange" style="width: 50%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Vitesse du vent</div>
+                            <i data-feather="wind" class="icon-purple"></i>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-value">12 km/h</div>
+                            <p class="card-trend">Conditions actuelles du champ</p>
+                            <div class="progress-bar">
+                                <div class="progress-value purple" style="width: 33%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Prediction Forms -->
+                <div class="prediction-forms">
+                    <!-- Water Prediction Form -->
+                    <div class="card form-card">
+                        <h2 class="form-title">Prédiction d'eau</h2>
+                        <form id="water-prediction-form" action="/predict_eau" method="post" class="prediction-form">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="temperature">Température (°C)</label>
+                                    <input id="temperature" name="temperature" type="number" placeholder="ex: 25" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="humidity">Humidité (%)</label>
+                                    <input id="humidity" name="humidity" type="number" placeholder="ex: 60" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="soil-type">Type de sol</label>
+                                    <select id="soil-type" name="soil_type" required>
+                                        <option value="">Sélectionner un type de sol</option>
+                                        <option value="clay">Argile</option>
+                                        <option value="loam" selected>Limon</option>
+                                        <option value="sandy">Sableux</option>
+                                        <option value="silt">Silt</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="plant-type">Type de plante</label>
+                                    <select id="plant-type" name="plant_type" required>
+                                        <option value="">Sélectionner un type de plante</option>
+                                        <option value="tomato" selected>Tomate</option>
+                                        <option value="corn">Maïs</option>
+                                        <option value="wheat">Blé</option>
+                                        <option value="rice">Riz</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <div class="slider-header">
+                                    <label for="sunlight">Exposition au soleil</label>
+                                    <span class="slider-value" id="sunlight-value">Moyen</span>
+                                </div>
+                                <input type="range" id="sunlight" name="sunlight" min="0" max="100" value="50" class="slider">
+                            </div>
+                            
+                            <button type="submit" class="submit-button">Prédire les besoins en eau</button>
+                        </form>
+                        
+                        <div id="water-result" class="result-container blue-result hidden">
+                            <div class="result-header">
+                                <i data-feather="droplet" class="icon-blue"></i>
+                                <h3>Résultat de la prédiction</h3>
+                            </div>
+                            <div class="result-content">
+                                <p class="result-label">Quantité d'eau recommandée:</p>
+                                <p class="result-value" id="water-amount">-- ml par jour</p>
+                            </div>
+                            <div class="result-note">
+                                Cette recommandation est basée sur les conditions environnementales et le type de plante fournis.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Crop Recommendation Form -->
+                    <div class="card form-card">
+                        <h2 class="form-title">Recommandation de culture</h2>
+                        <form id="crop-recommendation-form" action="/predict_culture" method="post" class="prediction-form">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="nitrogen">Azote (mg/kg)</label>
+                                    <input id="nitrogen" name="nitrogen" type="number" placeholder="ex: 40" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="phosphorus">Phosphore (mg/kg)</label>
+                                    <input id="phosphorus" name="phosphorus" type="number" placeholder="ex: 50" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="potassium">Potassium (mg/kg)</label>
+                                    <input id="potassium" name="potassium" type="number" placeholder="ex: 30" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="ph">Niveau de pH</label>
+                                    <input id="ph" name="ph" type="number" step="0.1" placeholder="ex: 6.5" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="rainfall">Précipitations annuelles (mm)</label>
+                                    <input id="rainfall" name="rainfall" type="number" placeholder="ex: 1000" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="region">Région</label>
+                                    <select id="region" name="region" required>
+                                        <option value="">Sélectionner une région</option>
+                                        <option value="tropical">Tropicale</option>
+                                        <option value="subtropical">Subtropicale</option>
+                                        <option value="temperate" selected>Tempérée</option>
+                                        <option value="arid">Aride</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <div class="slider-header">
+                                    <label for="avg-temperature">Température moyenne (°C)</label>
+                                    <span class="slider-value" id="avg-temperature-value">25°C</span>
+                                </div>
+                                <input type="range" id="avg-temperature" name="avg_temperature" min="0" max="50" value="25" class="slider">
+                            </div>
+                            
+                            <button type="submit" class="submit-button">Recommander des cultures</button>
+                        </form>
+                        
+                        <div id="crop-result" class="result-container green-result hidden">
+                            <div class="result-header">
+                                <i data-feather="sprout" class="icon-green"></i>
+                                <h3>Cultures recommandées</h3>
+                            </div>
+                            <div class="result-content" id="crop-recommendations">
+                                <!-- Les résultats seront injectés ici par JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
+
