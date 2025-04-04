@@ -45,26 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   
     // Handle sliders
-    const sunlightSlider = document.getElementById("sunlight")
-    const sunlightValue = document.getElementById("sunlight-value")
-  
-    sunlightSlider.addEventListener("input", function () {
-      const value = this.value
-      let label
-  
-      if (value < 25) {
-        label = "Faible"
-      } else if (value < 50) {
-        label = "Modéré"
-      } else if (value < 75) {
-        label = "Moyen"
-      } else {
-        label = "Élevé"
-      }
-  
-      sunlightValue.textContent = label
-    })
-  
     const tempSlider = document.getElementById("avg-temperature")
     const tempValue = document.getElementById("avg-temperature-value")
   
@@ -72,168 +52,115 @@ document.addEventListener("DOMContentLoaded", () => {
       tempValue.textContent = `${this.value}°C`
     })
   
-    // Form submissions
+    // Form submissions with real API calls
     const waterForm = document.getElementById("water-prediction-form")
     const waterResult = document.getElementById("water-result")
     const waterAmount = document.getElementById("water-amount")
   
-    waterForm.addEventListener("submit", (e) => {
+    waterForm.addEventListener("submit", async (e) => {
       e.preventDefault()
   
-      // In a real app, this would send the form data to your Flask API
-      // For demo purposes, we'll just show a random result
       const formData = new FormData(waterForm)
   
-      // Simulate API call
-      setTimeout(() => {
-        const amount = Math.floor(Math.random() * 500) + 100
-        waterAmount.textContent = `${amount} ml par jour`
+      try {
+        // Afficher un indicateur de chargement
+        waterAmount.textContent = "Calcul en cours..."
         waterResult.classList.remove("hidden")
   
-        // Re-initialize Feather icons for the newly visible content
-        feather.replace()
-      }, 1000)
+        const response = await fetch("/predict_eau", {
+          method: "POST",
+          body: formData,
+        })
+  
+        if (response.ok) {
+          const data = await response.json()
+  
+          if (data.error) {
+            waterAmount.textContent = `Erreur: ${data.error}`
+          } else {
+            waterAmount.textContent = data.water_amount
+          }
+        } else {
+          waterAmount.textContent = "Erreur lors de la prédiction"
+        }
+      } catch (error) {
+        console.error("Error:", error)
+        waterAmount.textContent = "Erreur de connexion"
+      }
+  
+      // Re-initialize Feather icons
+      feather.replace()
     })
   
     const cropForm = document.getElementById("crop-recommendation-form")
     const cropResult = document.getElementById("crop-result")
     const cropRecommendations = document.getElementById("crop-recommendations")
   
-    cropForm.addEventListener("submit", (e) => {
+    cropForm.addEventListener("submit", async (e) => {
       e.preventDefault()
   
-      // In a real app, this would send the form data to your Flask API
-      // For demo purposes, we'll just show sample results
       const formData = new FormData(cropForm)
   
-      // Simulate API call
-      setTimeout(() => {
-        // Sample crop recommendations
-        const crops = [
-          {
-            name: "Blé",
-            confidence: 85,
-            description: "Idéal pour vos conditions de sol avec une bonne efficacité hydrique.",
-          },
-          {
-            name: "Orge",
-            confidence: 72,
-            description: "Bonne alternative avec des conditions de croissance similaires.",
-          },
-          {
-            name: "Maïs",
-            confidence: 65,
-            description: "Option possible mais peut nécessiter plus d'eau.",
-          },
-        ]
-  
-        // Clear previous results
-        cropRecommendations.innerHTML = ""
-  
-        // Add new results
-        crops.forEach((crop) => {
-          const cropItem = document.createElement("div")
-          cropItem.className = "crop-item"
-  
-          cropItem.innerHTML = `
-            <div class="crop-header">
-              <p class="crop-name">${crop.name}</p>
-              <span class="crop-confidence">${crop.confidence}% match</span>
-            </div>
-            <div class="crop-progress">
-              <div class="crop-progress-value" style="width: ${crop.confidence}%"></div>
-            </div>
-            <p class="crop-description">${crop.description}</p>
-          `
-  
-          cropRecommendations.appendChild(cropItem)
-        })
-  
+      try {
+        // Afficher un indicateur de chargement
+        cropRecommendations.innerHTML = "<p>Calcul des recommandations en cours...</p>"
         cropResult.classList.remove("hidden")
   
-        // Re-initialize Feather icons for the newly visible content
-        feather.replace()
-      }, 1000)
+        const response = await fetch("/predict_culture", {
+          method: "POST",
+          body: formData,
+        })
+  
+        if (response.ok) {
+          const data = await response.json()
+  
+          if (data.error) {
+            cropRecommendations.innerHTML = `<p>Erreur: ${data.error}</p>`
+          } else {
+            // Clear previous results
+            cropRecommendations.innerHTML = ""
+  
+            // Add new results
+            data.recommendations.forEach((crop) => {
+              const cropItem = document.createElement("div")
+              cropItem.className = "crop-item"
+  
+              cropItem.innerHTML = `
+                <div class="crop-header">
+                  <p class="crop-name">${crop.name}</p>
+                  <span class="crop-confidence">${crop.confidence}% match</span>
+                </div>
+                <div class="crop-progress">
+                  <div class="crop-progress-value" style="width: ${crop.confidence}%"></div>
+                </div>
+                <p class="crop-description">${crop.description}</p>
+              `
+  
+              cropRecommendations.appendChild(cropItem)
+            })
+          }
+        } else {
+          cropRecommendations.innerHTML = "<p>Erreur lors de la prédiction</p>"
+        }
+      } catch (error) {
+        console.error("Error:", error)
+        cropRecommendations.innerHTML = "<p>Erreur de connexion</p>"
+      }
+  
+      // Re-initialize Feather icons
+      feather.replace()
     })
   
-    // Handle form submission to Flask endpoints
-    // In a real implementation, you would uncomment these and modify as needed
+    // Pré-remplir les champs de température min/max en fonction de la température
+    const temperatureInput = document.getElementById("temperature")
+    const tempMinInput = document.getElementById("temp_min")
+    const tempMaxInput = document.getElementById("temp_max")
   
-    /*
-    waterForm.addEventListener('submit', async function(e) {
-      e.preventDefault();
-      
-      const formData = new FormData(waterForm);
-      
-      try {
-        const response = await fetch('/predict_eau', {
-          method: 'POST',
-          body: formData
-        });
-        
-        if (response.ok) {
-          const data = await response.json();
-          waterAmount.textContent = `${data.water_amount} ml par jour`;
-          waterResult.classList.remove('hidden');
-        } else {
-          console.error('Error submitting form');
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      }
-      
-      // Re-initialize Feather icons
-      feather.replace();
-    });
-    
-    cropForm.addEventListener('submit', async function(e) {
-      e.preventDefault();
-      
-      const formData = new FormData(cropForm);
-      
-      try {
-        const response = await fetch('/predict_culture', {
-          method: 'POST',
-          body: formData
-        });
-        
-        if (response.ok) {
-          const data = await response.json();
-          
-          // Clear previous results
-          cropRecommendations.innerHTML = '';
-          
-          // Add new results
-          data.recommendations.forEach(crop => {
-            const cropItem = document.createElement('div');
-            cropItem.className = 'crop-item';
-            
-            cropItem.innerHTML = `
-              <div class="crop-header">
-                <p class="crop-name">${crop.name}</p>
-                <span class="crop-confidence">${crop.confidence}% match</span>
-              </div>
-              <div class="crop-progress">
-                <div class="crop-progress-value" style="width: ${crop.confidence}%"></div>
-              </div>
-              <p class="crop-description">${crop.description}</p>
-            `;
-            
-            cropRecommendations.appendChild(cropItem);
-          });
-          
-          cropResult.classList.remove('hidden');
-        } else {
-          console.error('Error submitting form');
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      }
-      
-      // Re-initialize Feather icons
-      feather.replace();
-    });
-    */
+    temperatureInput.addEventListener("input", function () {
+      const temp = Number.parseFloat(this.value) || 0
+      tempMinInput.value = (temp - 5).toFixed(1)
+      tempMaxInput.value = (temp + 5).toFixed(1)
+    })
   })
   
   

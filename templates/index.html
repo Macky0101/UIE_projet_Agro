@@ -186,6 +186,26 @@
                                 </div>
                                 
                                 <div class="form-group">
+                                    <label for="ph">Niveau de pH</label>
+                                    <input id="ph" name="ph" type="number" step="0.1" placeholder="ex: 6.5" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="rainfall">Précipitations (mm)</label>
+                                    <input id="rainfall" name="rainfall" type="number" placeholder="ex: 10" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="temp_min">Température min (°C)</label>
+                                    <input id="temp_min" name="temp_min" type="number" placeholder="ex: 18" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="temp_max">Température max (°C)</label>
+                                    <input id="temp_max" name="temp_max" type="number" placeholder="ex: 30" required>
+                                </div>
+                                
+                                <div class="form-group">
                                     <label for="soil-type">Type de sol</label>
                                     <select id="soil-type" name="soil_type" required>
                                         <option value="">Sélectionner un type de sol</option>
@@ -198,7 +218,7 @@
                                 
                                 <div class="form-group">
                                     <label for="plant-type">Type de plante</label>
-                                    <select id="plant-type" name="plant_type" required>
+                                    <select id="plant-type" name="plant_type">
                                         <option value="">Sélectionner un type de plante</option>
                                         <option value="tomato" selected>Tomate</option>
                                         <option value="corn">Maïs</option>
@@ -206,14 +226,6 @@
                                         <option value="rice">Riz</option>
                                     </select>
                                 </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <div class="slider-header">
-                                    <label for="sunlight">Exposition au soleil</label>
-                                    <span class="slider-value" id="sunlight-value">Moyen</span>
-                                </div>
-                                <input type="range" id="sunlight" name="sunlight" min="0" max="100" value="50" class="slider">
                             </div>
                             
                             <button type="submit" class="submit-button">Prédire les besoins en eau</button>
@@ -229,7 +241,7 @@
                                 <p class="result-value" id="water-amount">-- ml par jour</p>
                             </div>
                             <div class="result-note">
-                                Cette recommandation est basée sur les conditions environnementales et le type de plante fournis.
+                                Cette recommandation est basée sur les conditions environnementales et le type de sol fournis.
                             </div>
                         </div>
                     </div>
@@ -240,39 +252,33 @@
                         <form id="crop-recommendation-form" action="/predict_culture" method="post" class="prediction-form">
                             <div class="form-grid">
                                 <div class="form-group">
-                                    <label for="nitrogen">Azote (mg/kg)</label>
+                                    <label for="nitrogen">Azote (N) (mg/kg)</label>
                                     <input id="nitrogen" name="nitrogen" type="number" placeholder="ex: 40" required>
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="phosphorus">Phosphore (mg/kg)</label>
+                                    <label for="phosphorus">Phosphore (P) (mg/kg)</label>
                                     <input id="phosphorus" name="phosphorus" type="number" placeholder="ex: 50" required>
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="potassium">Potassium (mg/kg)</label>
+                                    <label for="potassium">Potassium (K) (mg/kg)</label>
                                     <input id="potassium" name="potassium" type="number" placeholder="ex: 30" required>
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="ph">Niveau de pH</label>
-                                    <input id="ph" name="ph" type="number" step="0.1" placeholder="ex: 6.5" required>
+                                    <input id="ph-crop" name="ph" type="number" step="0.1" placeholder="ex: 6.5" required>
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="rainfall">Précipitations annuelles (mm)</label>
-                                    <input id="rainfall" name="rainfall" type="number" placeholder="ex: 1000" required>
+                                    <input id="rainfall-crop" name="rainfall" type="number" placeholder="ex: 1000" required>
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="region">Région</label>
-                                    <select id="region" name="region" required>
-                                        <option value="">Sélectionner une région</option>
-                                        <option value="tropical">Tropicale</option>
-                                        <option value="subtropical">Subtropicale</option>
-                                        <option value="temperate" selected>Tempérée</option>
-                                        <option value="arid">Aride</option>
-                                    </select>
+                                    <label for="humidity-crop">Humidité (%)</label>
+                                    <input id="humidity-crop" name="humidity" type="number" placeholder="ex: 60" required>
                                 </div>
                             </div>
                             
