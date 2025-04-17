@@ -30,10 +30,9 @@ def predict_eau():
         
         # Conversion des types de sol de l'interface vers votre modèle
         soil_type_mapping = {
-            'clay': 'argileux',
-            'loam': 'limoneux',
-            'sandy': 'sablé',
-            'silt': 'silteux'
+            'argileux': 'argileux',
+            'sablé': 'sablé',
+            'calcaire': 'calcaire',
         }
         
         type_sol = soil_type_mapping.get(soil_type, 'sablé')
